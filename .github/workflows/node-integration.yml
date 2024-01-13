@@ -9,11 +9,6 @@ on:
 jobs:
   build:
       runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          node-version: [14.x, 16.x, 18.x]
-          # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
       steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -27,17 +22,16 @@ jobs:
       - name: test
         run: npm run test --if-present
 
-  # test:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [18.x]
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Use Node.js ${{ matrix.node-version }}
-  #     uses: actions/setup-node@v3
-  #     with:
-  #       node-version: ${{ matrix.node-version }}
-  #       cache: 'npm'
-  #   - run: npm ci
-  #   - run: npm run test --if-present
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mr-smithers-excellent/docker-build-push@v6
+        name: Build & push Docker image
+        with:
+          image: davdgs10/pokerand
+          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
