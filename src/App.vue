@@ -14,7 +14,7 @@ import HelloWorld from "./components/HelloWorld.vue";
     />
 
     <div class="wrapper">
-      <HelloWorld msg="Pokemon Randomizer" />
+      <HelloWorld msg="what is that pokemon" />
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
