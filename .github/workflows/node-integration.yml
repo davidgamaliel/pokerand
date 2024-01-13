@@ -31,7 +31,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: davdgs10/pokerand
-          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+          tags: ${{ github.sha }}
           registry: docker.io
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
